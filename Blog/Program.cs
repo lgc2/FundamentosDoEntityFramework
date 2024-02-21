@@ -10,7 +10,7 @@ namespace Blog
             using (var context = new BlogDataContext())
             {
                 // CREATE
-                // var tag = new Tag { Name = "ASP.NET", Slug = "aspnet" };
+                // var tag = new Tag { Name = ".NET", Slug = "dotnet" };
                 // context.Tags.Add(tag);
 
                 // UPDATE
@@ -24,6 +24,14 @@ namespace Blog
                 // context.Remove(tag);
 
                 // context.SaveChanges();
+
+                // SELECT
+                // var tags = context.Tags; // só é uma referência, não foi no banco ainda
+                var tags = context.Tags.ToList(); // com o ToList() a query foi de fato executada. O ToList() deve ser colocado sempre no final da query
+                foreach (var item in tags)
+                {
+                    Console.WriteLine(item.Name);
+                }
 
             }
         }
