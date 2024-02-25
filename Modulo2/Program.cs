@@ -10,6 +10,8 @@ namespace Blog
         {
             using var context = new BlogDataContext();
 
+            // INSERT (encadeado)
+            // --------------------------------------------------------------------------------------
             // var user = new User
             // {
             //     Name = "André Baltieri",
@@ -40,17 +42,39 @@ namespace Blog
 
             // context.Posts.Add(post);
             // context.SaveChanges();
+            // --------------------------------------------------------------------------------------
 
-            var posts = context
+            // SELECT
+            // --------------------------------------------------------------------------------------
+            // var posts = context
+            //     .Posts
+            //     .AsNoTracking()
+            //     .Include(x => x.Author) // incluir o subconjunto Author é como se fizesse um join na tabela User
+            //     .Include(x => x.Category) // incluir o subconjunto Author é como se fizesse um join na tabela User
+            //                               // .ThenInclude(x => x.) // maneira de realcionar um filho fazendo um subselect
+            //     .Where(x => x.AuthorId == 12)
+            //     .OrderByDescending(x => x.LastUpdateDate)
+            //     .ToList();
+
+            // foreach (var post in posts)
+            //     Console.WriteLine($"{post.Title}, escrito por {post.Author?.Name} em {post.Category?.Name}");
+            // --------------------------------------------------------------------------------------
+
+            // UPDATE
+            // --------------------------------------------------------------------------------------
+            var post = context
                 .Posts
-                .AsNoTracking()
-                .Include(x => x.Author) // incluir o subconjunto Author é como se fizesse um join na tabela User
-                .Where(x => x.AuthorId == 12)
+                // .AsNoTracking() --> precisa do tracking no UPDATE
+                .Include(x => x.Author)
+                .Include(x => x.Category)
                 .OrderByDescending(x => x.LastUpdateDate)
-                .ToList();
+                .FirstOrDefault();
 
-            foreach (var post in posts)
-                Console.WriteLine($"{post.Title}, escrito por {post.Author?.Name}");
+            post.Author.Name = "Update test";
+
+            context.Posts.Update(post);
+            context.SaveChanges();
+            // --------------------------------------------------------------------------------------
         }
     }
 }
