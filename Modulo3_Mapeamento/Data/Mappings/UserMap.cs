@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Blog.Data.Mappings
 {
-    public class CategoryMap : IEntityTypeConfiguration<Category>
+    public class UserMap : IEntityTypeConfiguration<User>
     {
-        public void Configure(EntityTypeBuilder<Category> builder)
+        public void Configure(EntityTypeBuilder<User> builder)
         {
-            // Tabela. Isso pq o EF pluraliza o nome da tabela por padrão
-            builder.ToTable("Category");
+            // Tabela
+            builder.ToTable("User");
 
             // Chave primária
             builder.HasKey(x => x.Id);
@@ -26,6 +26,11 @@ namespace Blog.Data.Mappings
                 .HasColumnType("NVARCHAR")
                 .HasMaxLength(80);
 
+            builder.Property(x => x.Bio);
+            builder.Property(x => x.Email);
+            builder.Property(x => x.Image);
+            builder.Property(x => x.PasswordHash);
+
             builder.Property(x => x.Slug)
                 .IsRequired()
                 .HasColumnName("Slug")
@@ -33,7 +38,7 @@ namespace Blog.Data.Mappings
                 .HasMaxLength(80);
 
             // Índices
-            builder.HasIndex(x => x.Slug, "IX_Category_Slug")
+            builder.HasIndex(x => x.Slug, "IX_User_Slug")
                 .IsUnique();
         }
     }
