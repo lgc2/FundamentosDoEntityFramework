@@ -30,6 +30,17 @@ namespace Blog.Data.Mappings
             // Índices
             builder.HasIndex(x => x.Slug, "IX_Post_Slug")
                 .IsUnique();
+
+            // Relacionamentos
+            builder.HasOne(x => x.Author)
+                .WithMany(x => x.Posts)
+                .HasConstraintName("FK_Post_Author")
+                .OnDelete(DeleteBehavior.Cascade); // só um exemplo, cuidado com o cascade!!!
+
+            builder.HasOne(x => x.Category)
+                .WithMany(x => x.Posts)
+                .HasConstraintName("FK_Post_Category")
+                .OnDelete(DeleteBehavior.Cascade); // só um exemplo, cuidado com o cascade!!!
         }
     }
 }
