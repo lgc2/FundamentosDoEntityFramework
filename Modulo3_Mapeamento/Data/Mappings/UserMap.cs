@@ -40,6 +40,22 @@ namespace Blog.Data.Mappings
             // Índices
             builder.HasIndex(x => x.Slug, "IX_User_Slug")
                 .IsUnique();
+
+            // relacionamento ManyToMany
+            builder.HasMany(x => x.Roles)
+                .WithMany(x => x.Users)
+                .UsingEntity<Dictionary<string, object>>( // entidade/tabela virtual para relacionar Posts com Tags
+                    "UserRole",
+                    role => role.HasOne<Role>()
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .HasConstraintName("FK_UserRole_RoleId")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    user => user.HasOne<User>()
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("FK_UserRole_UserId")
+                        .OnDelete(DeleteBehavior.Cascade));
         }
     }
 }
