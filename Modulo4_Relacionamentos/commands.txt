@@ -1,0 +1,17 @@
+dotnet tool install --global dotnet-ef --version 7
+dotnet add package Microsoft.EntityFrameworkCore.Design --version 7
+
+// Para executar o comando de migrations, tive que instalar Microsoft.EntityFrameworkCore.Design antes
+dotnet ef migrations add InitialCreation
+
+// Aplica as migrations que gerou no banco
+dotnet ef database update
+
+dotnet ef migrations add AdicionadoCampoGithub
+
+/*
+Para parar de trabalhar com migrations, basta deletar a pasta 'Migrations' do projeto e executar um 'DROP TABLE _EFMigrationsHistory' no banco.
+Pode tambem remover o pacote Microsoft.EntityFrameworkCore.Design.
+O banco continuará funcionando normalmente.
+*/
+
