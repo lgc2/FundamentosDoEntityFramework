@@ -6,23 +6,32 @@ namespace Blog
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             using var context = new BlogDataContext();
 
-            var user = new User
-            {
-                Bio = "9x MS MVP",
-                Email = "andre2@balta.io",
-                GitHub = "lgc2",
-                Image = "https://balta.io",
-                Name = "Balta",
-                PasswordHash = "981asniasdh02",
-                Slug = "andr-balta"
-            };
+            var posts = await GetPosts(context);
+            var users = await GetUsers(context);
 
-            context.Users.Add(user);
-            context.SaveChanges();
+            foreach (var post in posts)
+            {
+                Console.WriteLine(post.Title);
+            }
+
+            foreach (var user in users)
+            {
+                Console.WriteLine(user.Name);
+            }
+        }
+
+        public static async Task<IEnumerable<Post>> GetPosts(BlogDataContext context)
+        {
+            return await context.Posts.ToListAsync();
+        }
+
+        public static async Task<IEnumerable<User>> GetUsers(BlogDataContext context)
+        {
+            return await context.Users.ToListAsync();
         }
     }
 }
