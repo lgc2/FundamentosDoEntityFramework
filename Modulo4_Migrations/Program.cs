@@ -1,4 +1,5 @@
-﻿using Blog.Data;
+﻿using System.Data;
+using Blog.Data;
 using Blog.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -6,32 +7,32 @@ namespace Blog
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             using var context = new BlogDataContext();
 
-            var posts = await GetPosts(context);
-            var users = await GetUsers(context);
-
-            foreach (var post in posts)
-            {
-                Console.WriteLine(post.Title);
-            }
+            var users = GetUsers(context, 0, 5);
+            var users2 = GetUsers(context, 5, 10);
 
             foreach (var user in users)
             {
-                Console.WriteLine(user.Name);
+                Console.WriteLine(user.Id);
+            }
+
+            foreach (var user in users2)
+            {
+                Console.WriteLine(user.Id);
             }
         }
 
-        public static async Task<IEnumerable<Post>> GetPosts(BlogDataContext context)
+        public static List<User> GetUsers(BlogDataContext context, int skip = 0, int take = 5)
         {
-            return await context.Posts.ToListAsync();
-        }
-
-        public static async Task<IEnumerable<User>> GetUsers(BlogDataContext context)
-        {
-            return await context.Users.ToListAsync();
+            return context
+                .Users
+                .AsNoTracking()
+                .Skip(skip)
+                .Take(take)
+                .ToList();
         }
     }
 }
