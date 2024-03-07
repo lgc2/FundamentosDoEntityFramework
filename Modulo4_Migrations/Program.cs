@@ -14,15 +14,8 @@ namespace Blog
             var users = GetUsers(context, 0, 5);
             var users2 = GetUsers(context, 5, 10);
 
-            foreach (var user in users)
-            {
-                Console.WriteLine(user.Id);
-            }
-
-            foreach (var user in users2)
-            {
-                Console.WriteLine(user.Id);
-            }
+            // query montada "manualmente"
+            var postsWithTagsCount = context.PostWithTagsCount.AsNoTracking().ToList();
         }
 
         public static List<User> GetUsers(BlogDataContext context, int skip = 0, int take = 5)

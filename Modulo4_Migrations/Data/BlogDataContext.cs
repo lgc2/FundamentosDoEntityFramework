@@ -10,6 +10,7 @@ namespace Blog.Data
         public DbSet<Post> Posts { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<PostWithTagsCount> PostWithTagsCount { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options.UseSqlServer(@"Server=127.0.0.1,1433;Database=BlogMigration;User ID=sa;Password=1q2w3e4r@#$;TrustServerCertificate=true");
@@ -20,6 +21,11 @@ namespace Blog.Data
             modelBuilder.ApplyConfiguration(new UserMap());
             modelBuilder.ApplyConfiguration(new PostMap());
             modelBuilder.ApplyConfiguration(new RoleMap());
+
+            modelBuilder.Entity<PostWithTagsCount>(x =>
+            {
+                x.ToSqlQuery("sua query aqui. O nome dos campos na query precisam ser exatamente iguais aos da Model, e se precisar utilizar alias (AS)");
+            });
         }
     }
 }
